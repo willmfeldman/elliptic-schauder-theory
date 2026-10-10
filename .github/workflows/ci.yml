@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# CI: builds the library with warnings as errors, then runs the release gate: no sorries
+# (`check_integrity.py` on the sources and the build log), the axioms of the 16 headline theorems
+# (`scripts/check_axioms.lean`), the theorem manifest (`check-formalization-manifest.rb`), the
+# statement notation check, and elaboration of the comparator challenge workspaces (`challenges/`).
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Restore Lake artifacts
+        uses: actions/cache/restore@v6
+        with:
+          path: .lake/build
+          key: lake-build-${{ runner.os }}-${{ hashFiles('lake-manifest.json', 'lean-toolchain') }}-${{ hashFiles('BasicElliptic.lean', 'BasicElliptic/**/*.lean') }}
+          restore-keys: |
+            lake-build-${{ runner.os }}-${{ hashFiles('lake-manifest.json', 'lean-toolchain') }}-
+            lake-build-${{ runner.os }}-${{ hashFiles('lean-toolchain') }}-
+      - name: Fetch mathlib cache
+        run: lake exe cache get
+      - name: Build library
+        run: |
+          set -o pipefail
+          lake build --wfail 2>&1 | tee build.log
+      # RELEASE GATE: fails on any `sorry`/`admit`/`axiom`/`native_decide` in the library sources,
+      # on non-module files, and on `declaration uses 'sorry'` in the build log.
+      - name: Release gate (proof integrity)
+        run: |
+          python3 scripts/check_integrity.py --build-log build.log
+      - name: Enforce library source-file size limit
+        run: |
+          find BasicElliptic -type f -name '*.lean' -exec wc -l {} + | \
+            awk '$2 != "total" && $1 >= 1000 { print; bad = 1 } END { exit bad }'
+          test "$(wc -l < BasicElliptic.lean)" -lt 1000
+      # `#print axioms` of the 16 headline theorems is exactly [propext, Classical.choice,
+      # Quot.sound] (`#guard_msgs`), and every name in formalization.yaml resolves with these axioms.
+      - name: Axioms and theorem manifest
+        run: |
+          lake env lean scripts/check_axioms.lean
+          ruby scripts/check-formalization-manifest.rb
+      # Print every statement and definition with `pp.notation false` and flag big-operator
+      # binders that swallow a following summand. The log is uploaded for inspection.
+      - name: Statement notation check
+        run: python3 scripts/check_notation.py --log notation-check.log
+      - name: Upload notation log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: notation-check-log
+          path: notation-check.log
+      # Challenge.lean states the challenges with `sorry` by design; the vocabulary files and the
+      # solutions must contain none.
+      - name: Check challenge vocabulary and solutions for sorry, axioms, and native_decide
+        run: |
+          ! grep -nE '\bsorry\b|^axiom |\badmit\b|native_decide' challenges/*/Vocabulary.lean challenges/*/Solution.lean
+      # Elaboration shows that each Vocabulary, Challenge and Solution compiles against this
+      # commit's library, and that every solution theorem uses exactly the permitted axioms. It is
+      # not a statement comparison; that is the release comparator workflow's job.
+      - name: Elaborate challenge workspaces (Vocabulary, Challenge and Solution)
+        run: scripts/check-challenges.sh
+      - name: Check challenge vocabulary sync and module headers
+        run: python3 scripts/challenge-prep.py check
+      - name: Save Lake artifacts
+        uses: actions/cache/save@v6
+        if: always()
+        with:
+          path: .lake/build
+          key: lake-build-${{ runner.os }}-${{ hashFiles('lake-manifest.json', 'lean-toolchain') }}-${{ hashFiles('BasicElliptic.lean', 'BasicElliptic/**/*.lean') }}

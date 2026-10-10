@@ -1,0 +1,17 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "BasicElliptic.challenge_contDiffHolderOn_two_of_isSolution",
+    "BasicElliptic.challenge_schauder_ball_estimate",
+    "BasicElliptic.challenge_schauder_halfBall_conormal",
+    "BasicElliptic.challenge_schauder_halfBall_dirichlet",
+    "BasicElliptic.challenge_contDiffHolderOn_two_of_polyApprox"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

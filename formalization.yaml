@@ -1,0 +1,246 @@
+# Theorem manifest for BasicElliptic. Checked by `ruby scripts/check-formalization-manifest.rb`
+# (CI): names resolve, axioms are exactly axioms.expected, dependency revisions match
+# lake-manifest.json, and the challenge inventory matches challenges/*/config.json. Statement
+# equality between each Challenge and its Solution is checked only by the release comparator
+# workflow.
+schema_version: "1"
+project:
+  name: "BasicElliptic"
+  title: "elliptic-schauder-theory: Hölder spaces and flat-boundary Schauder theory in Lean"
+  authors:
+    - "William M. Feldman"
+  repository: "https://github.com/willmfeldman/elliptic-schauder-theory"
+  license: "Apache-2.0"
+  language: "Lean"
+  theorem_prover: "Lean 4"
+  lean_toolchain: "leanprover/lean4:v4.35.0-rc3"
+  mathlib: "v4.35.0-rc3"
+  description: >-
+    Lean 4 formalization of linear elliptic Schauder theory: Hölder spaces on
+    sets and Campanato's characterization; interior and flat-boundary C^{1,α}
+    and C^{2,α} regularity in divergence form (conormal) and nondivergence form
+    (conormal-compatible and Dirichlet); and the quasilinear conormal problem.
+
+dependencies:
+  - name: "mathlib"
+    url: "https://github.com/leanprover-community/mathlib4"
+    rev: "c55e6e786f49471c72fbddbec5415808896aec1e"
+  - name: "viscosity_solns"
+    url: "https://github.com/willmfeldman/viscosity-solution-theory"
+    rev: "b9dc82d59e19c5689b6669b41e0c59168c1cdc84"
+  - name: "AleksandrovDifferentiability"
+    url: "https://github.com/willmfeldman/aleksandrov-differentiability"
+    rev: "5e5c2ec4cee4f8851387e9bb309eeb703cd72a25"
+
+build:
+  package_file: "lakefile.toml"
+  manifest_file: "lake-manifest.json"
+  root_import: "BasicElliptic"
+  commands:
+    - "lake exe cache get"
+    - "lake build --wfail"
+  checks:
+    - "python3 scripts/check_integrity.py --build-log build.log"
+    - "lake env lean scripts/check_axioms.lean"
+    - "ruby scripts/check-formalization-manifest.rb"
+    - "python3 scripts/check_notation.py"
+    - "scripts/check-challenges.sh"
+    - "python3 scripts/challenge-prep.py check"
+
+axioms:
+  expected:
+    - "propext"
+    - "Classical.choice"
+    - "Quot.sound"
+
+automation:
+  methods:
+    - method: "agent-assisted formalization"
+      models:
+        - "Claude (Anthropic)"
+      framework: "Claude Code agentic coding workflow"
+      review_status: "human-supervised"
+      notes: >-
+        The Lean proofs were written by AI coding agents (Claude) under the author's mathematical
+        direction and review. The theorem statements and proof routes were reviewed by the author.
+        Correctness rests on Lean's kernel check, together with the comparator challenges in
+        challenges/.
+targets:
+  - id: div-interior-c1alpha
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: "Interior C^{1,α} regularity and scaled estimate, divergence form"
+    source: "M. Giaquinta, L. Martinazzi, An Introduction to the Regularity Theory for Elliptic Systems, Harmonic Maps and Minimal Graphs, 2nd ed., 2012; D. Gilbarg, N. S. Trudinger, Elliptic Partial Differential Equations of Second Order, Springer, 2001"
+    module: BasicElliptic.Div.Interior.Main
+    declaration: BasicElliptic.Div.contDiffHolderOn_one_of_isWeakSolution
+    related_declarations:
+      - BasicElliptic.Div.c1Holder_ball_estimate
+    informal: >
+      A C¹ weak solution of -div(a∇w - G) = f on an open set U, with a uniformly elliptic (not
+      necessarily symmetric) and C^α, G ∈ C^α and f bounded and measurable, is C^{1,α} on every
+      closed ball in U, with a scaled estimate whose constant depends only on the dimension, α,
+      the ellipticity constants and a bound on the scale-invariant Hölder seminorm of a.
+    challenge: challenges/divergence-form
+    challenge_theorems:
+      - BasicElliptic.challenge_contDiffHolderOn_one_of_isWeakSolution
+      - BasicElliptic.challenge_c1Holder_ball_estimate
+
+  - id: div-conormal-c1alpha
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: "Conormal flat-boundary C^{1,α} regularity and scaled estimate"
+    source: "Giaquinta–Martinazzi; Gilbarg–Trudinger (Dirichlet analogue); G. M. Lieberman, Oblique Derivative Problems for Elliptic Equations, World Scientific, 2013, Chapter 4"
+    module: BasicElliptic.Div.Boundary.Main
+    declaration: BasicElliptic.Div.contDiffHolderOn_one_halfBall_of_isConormalSolution
+    related_declarations:
+      - BasicElliptic.Div.c1Holder_halfBall_estimate
+    informal: >
+      A conormal weak solution w ∈ C¹ of -div(a∇w - G) = f on a closed half ball (test functions
+      need not vanish on the flat part), with a symmetric, uniformly elliptic and C^α, G ∈ C^α and
+      f bounded, is C^{1,α} on the half ball of half the radius, with a scaled estimate at an
+      arbitrary centre.
+    challenge: challenges/divergence-form
+    challenge_theorems:
+      - BasicElliptic.challenge_contDiffHolderOn_one_halfBall_of_isConormalSolution
+      - BasicElliptic.challenge_c1Holder_halfBall_estimate
+
+  - id: div-strong-weak-reflection
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: "Strong-to-weak bridges and even reflection with measurable coefficients"
+    source: "Standard arguments: integration by parts on the half ball (divergence theorem), and the even reflection of a conormal problem across the flat part; formalized here with measurable coefficients for the reflection"
+    module: BasicElliptic.Div.Boundary.StrongToWeak
+    declaration: BasicElliptic.Div.isConormalSolOn_of_strong
+    related_declarations:
+      - BasicElliptic.Div.isQuasilinearConormalSolOn_of_strong
+      - BasicElliptic.Div.IsConormalSolOn.evenReflect
+    informal: >
+      Pointwise strong solutions of the linear and quasilinear conormal problems are weak
+      solutions, and the even reflection of a conormal weak solution solves the reflected problem
+      on the full ball, with measurable coefficients.
+    challenge: challenges/divergence-form
+    challenge_theorems:
+      - BasicElliptic.challenge_isConormalSolOn_of_strong
+      - BasicElliptic.challenge_isQuasilinearConormalSolOn_of_strong
+      - BasicElliptic.challenge_isConormalSolOn_evenReflect
+
+  - id: div-conormal-c2alpha
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: "Linear conormal C^{2,α} from C^{1,α} coefficients"
+    source: "Giaquinta–Martinazzi; Gilbarg–Trudinger (by analogy)"
+    module: BasicElliptic.Div.Higher.Main
+    declaration: BasicElliptic.Div.contDiffHolderOn_two_halfBall_of_c1Holder_coeff
+    informal: >
+      With a symmetric, uniformly elliptic and C^{1,α}, G ∈ C^{1,α} and f ∈ C^α on a closed half
+      ball, a conormal weak solution w ∈ C¹ is C^{2,α} on the half ball of half the radius.
+    challenge: challenges/divergence-form
+    challenge_theorems:
+      - BasicElliptic.challenge_contDiffHolderOn_two_halfBall_of_c1Holder_coeff
+
+  - id: div-quasilinear-conormal
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: "Quasilinear conormal regularity and scaled estimate"
+    source: "D. Kinderlehrer, L. Nirenberg, Regularity in free boundary problems, Ann. Scuola Norm. Sup. Pisa (4) 4 (1977) (type of conclusion); Giaquinta–Martinazzi, applied to the derivative equations"
+    module: BasicElliptic.Div.Quasilinear.Main
+    declaration: BasicElliptic.Div.contDiffOn_halfBall_of_quasilinear_conormal
+    related_declarations:
+      - BasicElliptic.Div.quasilinear_conormal_estimate
+    informal: >
+      For Φ ∈ C^{k+1} with DΦ uniformly elliptic and symmetric on an open convex set U, a C¹
+      quasilinear conormal weak solution of div Φ(∇w) = 0 with ∇w in U is C^{k+1} on the half ball
+      of half the radius; with Φ ∈ C², there are η > 0 and C such that |∇w| ≤ η gives r|∇w(x)| +
+      r²|D²w(x)| ≤ C osc w at the centre.
+    challenge: challenges/divergence-form
+    challenge_theorems:
+      - BasicElliptic.challenge_contDiffOn_halfBall_of_quasilinear_conormal
+      - BasicElliptic.challenge_quasilinear_conormal_estimate
+
+  - id: nondiv-interior-schauder
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: "Interior Schauder regularity and scaled estimate, nondivergence form"
+    source: "Gilbarg–Trudinger; L. A. Caffarelli, Interior a priori estimates for solutions of fully non-linear equations, Ann. of Math. 130 (1989)"
+    module: BasicElliptic.Nondiv.Interior.Main
+    declaration: BasicElliptic.Nondiv.contDiffHolderOn_two_of_isSolution
+    related_declarations:
+      - BasicElliptic.Nondiv.schauder_ball_estimate
+    informal: >
+      A C² solution of tr(a D²w) + ⟪b, ∇w⟫ = f on an open set, with a uniformly elliptic and a, b,
+      f ∈ C^α, is C^{2,α} on every closed ball inside, with a scaled estimate.
+    challenge: challenges/nondivergence-form
+    challenge_theorems:
+      - BasicElliptic.challenge_contDiffHolderOn_two_of_isSolution
+      - BasicElliptic.challenge_schauder_ball_estimate
+
+  - id: nondiv-boundary-schauder
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: "Flat-boundary Schauder regularity, nondivergence form"
+    source: "Gilbarg–Trudinger (oblique derivative and Dirichlet problems), flat case"
+    module: BasicElliptic.Nondiv.Boundary.Main
+    declaration: BasicElliptic.Nondiv.schauder_halfBall_conormal
+    related_declarations:
+      - BasicElliptic.Nondiv.schauder_halfBall_dirichlet
+    informal: >
+      A C² solution on a closed half ball centred on the flat part, with a uniformly elliptic and
+      a, b, f ∈ C^α, is C^{2,α} on the half ball of half the radius under either the
+      conormal-compatible condition ⟪aν, ∇w⟫ = γ (a symmetric, aν and γ of class C^{1,α}) or the
+      Dirichlet condition w = g with g ∈ C^{2,α}.
+    challenge: challenges/nondivergence-form
+    challenge_theorems:
+      - BasicElliptic.challenge_schauder_halfBall_conormal
+      - BasicElliptic.challenge_schauder_halfBall_dirichlet
+
+  - id: campanato-characterization
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: "Campanato's characterization of Hölder continuity on half balls"
+    source: "S. Campanato, Proprietà di hölderianità di alcune classi di funzioni, Ann. Scuola Norm. Sup. Pisa (3) 17 (1963); Giaquinta–Martinazzi"
+    module: BasicElliptic.Campanato.Holder
+    declaration: BasicElliptic.holderOnWith_of_campanato
+    informal: >
+      A function continuous on a closed half ball whose mean-square oscillation over every ball
+      intersected with the half ball is at most M² ρ^{2α} is α-Hölder there with constant C M, C =
+      C(E, α).
+    challenge: challenges/divergence-form
+    challenge_theorems:
+      - BasicElliptic.challenge_holderOnWith_of_campanato
+
+  - id: polynomial-approximation-bridge
+    kind: headline-theorem
+    expected_axioms: [propext, Quot.sound, Classical.choice]
+    title: "Polynomial approximation implies C^{2,α} on a convex body"
+    source: "Caffarelli (1989); Gilbarg–Trudinger, in pointwise form"
+    module: BasicElliptic.Poly.Bridge
+    declaration: BasicElliptic.contDiffHolderOn_two_of_polyApprox
+    informal: >
+      If u is approximated at every point of a bounded convex set with nonempty interior by
+      quadratic polynomials to order 2 + α, uniformly, then u is C^{2,α} on the set, with
+      derivatives within the set.
+    challenge: challenges/nondivergence-form
+    challenge_theorems:
+      - BasicElliptic.challenge_contDiffHolderOn_two_of_polyApprox
+
+comparator:
+  external_challenges:
+    directory: "challenges"
+    purpose: >-
+      Standalone comparator challenge workspaces, grouped by the library modules their solutions
+      import: divergence-form (the divergence-form targets and Campanato's characterization) and
+      nondivergence-form (the nondivergence-form targets and the polynomial-approximation bridge).
+      Each target's challenge and challenge_theorems fields name its workspace and theorems. In each, Vocabulary.lean restates the library definitions the
+      statements use over Mathlib only, Challenge.lean states the claims with `sorry` (with the
+      vocabulary copied into a generated block, so it imports Mathlib only), and Solution.lean
+      imports BasicElliptic and proves the same statements.
+    release_workflow: ".github/workflows/release-comparator.yml"
+    comparator_revision: "fd5d5bcf14177b187f66d4502071268d877887c3"
+    lean4export_revision: "66f1fb4bc256072069767fce52d39480e4524869"
+    landrun_revision: "811cfff51ceaf3d9843708aa6d22e9b84ccac8b4"
+    toolchain: "leanprover/lean4:v4.35.0-rc3"
+    mathlib: "v4.35.0-rc3"
+    permitted_axioms:
+      - "propext"
+      - "Classical.choice"
+      - "Quot.sound"

@@ -1,0 +1,127 @@
+cff-version: 1.2.0
+message: "If you use this Lean formalization, please cite it using this metadata."
+title: "elliptic-schauder-theory: Hölder spaces and flat-boundary Schauder theory in Lean"
+version: "0.1.0"
+date-released: "2026-10-09"
+license: "Apache-2.0"
+repository-code: "https://github.com/willmfeldman/elliptic-schauder-theory"
+authors:
+  - family-names: Feldman
+    given-names: "William M."
+abstract: >-
+  Lean 4 / Mathlib formalization of linear elliptic Schauder theory: Hölder spaces on sets and
+  Campanato's characterization; interior and flat-boundary C^{1,α} and C^{2,α} regularity in
+  divergence form (L² Campanato on the gradient field, conormal boundary condition) and in
+  nondivergence form (sup-norm Campanato, conormal-compatible and Dirichlet boundary
+  conditions); and C^{k+1} regularity up to the flat boundary and scaled estimates for the
+  quasilinear conormal problem div Φ(∇w) = 0.
+keywords:
+  - Lean
+  - Mathlib
+  - formalized mathematics
+  - elliptic partial differential equations
+  - Schauder estimates
+  - Campanato spaces
+  - Hölder spaces
+references:
+  - type: article
+    authors:
+      - family-names: Campanato
+        given-names: Sergio
+    title: "Proprietà di hölderianità di alcune classi di funzioni"
+    journal: "Annali della Scuola Normale Superiore di Pisa, Classe di Scienze (3)"
+    volume: "17"
+    start: 175
+    end: 188
+    year: 1963
+  - type: article
+    authors:
+      - family-names: Caffarelli
+        given-names: "Luis A."
+    title: "Interior a priori estimates for solutions of fully non-linear equations"
+    journal: "Annals of Mathematics (2)"
+    volume: "130"
+    issue: "1"
+    start: 189
+    end: 213
+    year: 1989
+  - type: book
+    authors:
+      - family-names: Giaquinta
+        given-names: Mariano
+      - family-names: Martinazzi
+        given-names: Luca
+    title: >-
+      An Introduction to the Regularity Theory for Elliptic Systems, Harmonic Maps and Minimal
+      Graphs
+    edition: "2nd"
+    publisher:
+      name: "Edizioni della Normale"
+    year: 2012
+  - type: book
+    authors:
+      - family-names: Gilbarg
+        given-names: David
+      - family-names: Trudinger
+        given-names: "Neil S."
+    title: "Elliptic Partial Differential Equations of Second Order"
+    collection-title: "Classics in Mathematics"
+    publisher:
+      name: "Springer"
+    year: 2001
+  - type: article
+    authors:
+      - family-names: Kinderlehrer
+        given-names: David
+      - family-names: Nirenberg
+        given-names: Louis
+    title: "Regularity in free boundary problems"
+    journal: "Annali della Scuola Normale Superiore di Pisa, Classe di Scienze (4)"
+    volume: "4"
+    issue: "2"
+    start: 373
+    end: 391
+    year: 1977
+  - type: book
+    authors:
+      - family-names: Lieberman
+        given-names: "Gary M."
+    title: "Oblique Derivative Problems for Elliptic Equations"
+    publisher:
+      name: "World Scientific"
+    year: 2013
+  - type: article
+    authors:
+      - family-names: Milakis
+        given-names: Emmanouil
+      - family-names: Silvestre
+        given-names: "Luis E."
+    title: "Regularity for fully nonlinear elliptic equations with Neumann boundary data"
+    journal: "Communications in Partial Differential Equations"
+    volume: "31"
+    issue: "8"
+    start: 1227
+    end: 1252
+    year: 2006
+  - type: article
+    authors:
+      - family-names: Simon
+        given-names: Leon
+    title: "Schauder estimates by scaling"
+    journal: "Calculus of Variations and Partial Differential Equations"
+    volume: "5"
+    issue: "5"
+    start: 391
+    end: 407
+    year: 1997
+  - type: book
+    authors:
+      - family-names: Evans
+        given-names: "Lawrence C."
+    title: "Partial Differential Equations"
+    edition: "2nd"
+    collection-title: "Graduate Studies in Mathematics"
+    volume: "19"
+    publisher:
+      name: "American Mathematical Society"
+    year: 2010

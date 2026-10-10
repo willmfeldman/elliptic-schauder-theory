@@ -1,0 +1,26 @@
+name = "basic_elliptic_theory"
+version = "0.1.0"
+description = "Basic elliptic theory: Hölder spaces and interior and flat-boundary Schauder theory (divergence and nondivergence form)"
+keywords = ["math"]
+defaultTargets = ["BasicElliptic"]
+preferReleaseBuild = true
+
+[leanOptions]
+pp.unicode.fun = true
+relaxedAutoImplicit = false
+autoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.35.0-rc3"
+
+[[require]]
+name = "viscosity_solns"
+git = "https://github.com/willmfeldman/viscosity-solution-theory"
+rev = "v0.4.0"
+
+[[lean_lib]]
+name = "BasicElliptic"

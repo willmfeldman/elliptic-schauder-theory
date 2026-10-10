@@ -1,0 +1,23 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "BasicElliptic.challenge_contDiffHolderOn_one_of_isWeakSolution",
+    "BasicElliptic.challenge_c1Holder_ball_estimate",
+    "BasicElliptic.challenge_contDiffHolderOn_one_halfBall_of_isConormalSolution",
+    "BasicElliptic.challenge_c1Holder_halfBall_estimate",
+    "BasicElliptic.challenge_isConormalSolOn_of_strong",
+    "BasicElliptic.challenge_isQuasilinearConormalSolOn_of_strong",
+    "BasicElliptic.challenge_isConormalSolOn_evenReflect",
+    "BasicElliptic.challenge_contDiffHolderOn_two_halfBall_of_c1Holder_coeff",
+    "BasicElliptic.challenge_contDiffOn_halfBall_of_quasilinear_conormal",
+    "BasicElliptic.challenge_quasilinear_conormal_estimate",
+    "BasicElliptic.challenge_holderOnWith_of_campanato"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

@@ -10,12 +10,14 @@ import BasicElliptic.Div.Quasilinear.SecondOrder
 import BasicElliptic.Div.Quasilinear.HigherOrder
 import BasicElliptic.Div.Quasilinear.Induction
 import BasicElliptic.Div.Quasilinear.Estimate
+import BasicElliptic.Div.Quasilinear.Three.Assemble
 
 /-!
 # The quasilinear conormal problem
 
-`Div.contDiffOn_halfBall_of_quasilinear_conormal` and `Div.quasilinear_conormal_estimate` prove
-`Div.QuasilinearConormalStatement` and `Div.QuasilinearConormalEstimateStatement`.
+`Div.contDiffOn_halfBall_of_quasilinear_conormal`, `Div.quasilinear_conormal_estimate` and
+`Div.quasilinear_conormal_estimate_three` prove `Div.QuasilinearConormalStatement`,
+`Div.QuasilinearConormalEstimateStatement` and `Div.QuasilinearConormalEstimateThreeStatement`.
 
 Status: sorry-free.
 * `k = 0` is the hypothesis `w ∈ C¹`; `k = 1` (`C²` up to the flat part) is
@@ -30,6 +32,10 @@ Status: sorry-free.
   carried in the directional classes `Div.DirHolderOn` and a linear `C^{m+2,α}` induction.
 * The scaled estimate is `Div.quasilinear_conormal_estimate_aux`
   (`Div/Quasilinear/Estimate.lean`).
+* The scaled third-order estimate, with constants uniform in the unit normal and in the structure
+  bounds, is `Div.quasilinear_conormal_estimate_three_aux` (`Div/Quasilinear/Three/`): a uniform
+  first-order estimate (including the constant normal flux `⟪Φ(0), ν⟫` at flat points), then the
+  once- and twice-differentiated equations, and a rotation to a fixed normal.
 -/
 
 public section
@@ -68,5 +74,13 @@ theorem Div.contDiffOn_halfBall_of_quasilinear_conormal (k : ℕ) :
 (`Div.QuasilinearConormalEstimateStatement`). -/
 theorem Div.quasilinear_conormal_estimate : Div.QuasilinearConormalEstimateStatement E :=
   Div.quasilinear_conormal_estimate_aux E
+
+/-- **Scaled third-order quasilinear conormal estimate, uniform in the structure** :
+`r |∇w(x)| + r² |D²w(x)| + r³ |D³w(x)| ≲ osc w` for solutions with small gradient, with constants
+depending only on the dimension, `lam`, `M` and `δ`
+(`Div.QuasilinearConormalEstimateThreeStatement`). -/
+theorem Div.quasilinear_conormal_estimate_three :
+    Div.QuasilinearConormalEstimateThreeStatement E :=
+  Div.quasilinear_conormal_estimate_three_aux E
 
 end BasicElliptic

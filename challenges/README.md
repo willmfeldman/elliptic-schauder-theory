@@ -1,21 +1,16 @@
 # Comparator Challenges
 
-This directory contains the release comparator workspaces for the 16 headline theorems of
-`BasicElliptic`, covering the nine targets of `formalization.yaml`. The targets are grouped into
-two workspaces by the library modules their solutions import, since Comparator's cost is mostly
-per workspace (it exports and replays the solution's whole import closure):
+This directory contains the release comparator workspace `main-results` for the 16 headline
+theorems of `BasicElliptic`, covering the nine targets of `formalization.yaml`. A single workspace
+holds every challenge statement, since Comparator's cost is mostly per workspace (it exports and
+replays the solution's whole import closure).
 
-- `divergence-form`: the divergence-form targets and Campanato's characterization, whose solutions
-  import 61 of the library's 87 modules;
-- `nondivergence-form`: the nondivergence-form targets and the polynomial-approximation bridge,
-  whose solutions import the other 26 modules (38 with shared infrastructure).
+The workspace is a standalone Lake workspace with:
 
-Each subdirectory is a standalone Lake workspace with:
-
-- `Vocabulary.lean`: the library definitions the statements use, restated over Mathlib only (see
-  below);
-- `Challenge.lean`: the trusted statement surface. It imports Mathlib modules only: the vocabulary is
-  copied into a generated block at its top, followed by the challenge statements with `sorry`;
+- `Vocabulary/*.lean`: the library definitions the statements use, restated over Mathlib only, one
+  module per library file (see below); `Vocabulary.lean` re-exports them;
+- `Challenge.lean`: the trusted statement surface. It imports the `Vocabulary.*` modules (which
+  import Mathlib only), followed by the challenge statements with `sorry`;
 - `Solution.lean`: the solution, importing the library modules that prove the statements;
 - `config.json`: comparator module names, theorem names and permitted axioms;
 - `lakefile.toml`, `lake-manifest.json` and `lean-toolchain`: workspace metadata pinned through the
@@ -36,12 +31,13 @@ and the library's declaration order, one part per library file:
 | divergence form | `Defs/Div.lean` | `IsTestFn`, `divergence`, `Div.IsWeakEqOn`, `Div.IsWeakSolWithin`, `Div.IsWeakSolOn`, `Div.IsConormalSolOn`, `Div.IsWeakSolOnField`, `Div.IsQuasilinearConormalSolOn` |
 | nondivergence form | `Defs/Nondiv.lean` | `Nondiv.op`, `Nondiv.IsSolOn`, `Nondiv.HasConormalBC`, `Nondiv.HasDirichletBC` |
 
-Each workspace restates only the parts its statements need. Each part drops the library file's
-theorems and imports the same Mathlib modules as the library file; workspaces also import the
+The workspace restates only the parts its statements need. Each part drops the library file's
+theorems and imports the same Mathlib modules as the library file; the workspace also imports the
 Mathlib modules of the corresponding `BasicElliptic/Statements/*` file, so that instance search
-elaborates the statements as the library does. `scripts/challenge-prep.py sync` copies
-`Vocabulary.lean` into the generated block of `Challenge.lean`, and `scripts/challenge-prep.py
-check` checks that the copy is current. Comparator then checks every restated definition reached
+elaborates the statements as the library does. The vocabulary is split along the library's module
+boundaries because Lean names auxiliary proofs per module: a single concatenated restatement
+would give `Nondiv.op` a different auxiliary proof than the library's. `scripts/challenge-prep.py
+check` validates the vocabulary modules and the imports of `Challenge.lean`. Comparator then checks every restated definition reached
 from a challenge statement against the library's, by name and by value.
 
 These definitions are built from Mathlib notions (`HolderOnWith`, `ContDiffOn`,
@@ -65,17 +61,17 @@ theorems for exactly these definitions. Points to note:
 
 | Workspace | Target (`formalization.yaml`) | Statements | Library theorems used by the solution |
 |---|---|---|---|
-| `divergence-form` | `div-interior-c1alpha` | interior `C^{1,α}` regularity and the scaled estimate, divergence form, `a` not necessarily symmetric (Giaquinta–Martinazzi; Gilbarg–Trudinger) | `Div.contDiffHolderOn_one_of_isWeakSolution`, `Div.c1Holder_ball_estimate` |
+| `main-results` | `div-interior-c1alpha` | interior `C^{1,α}` regularity and the scaled estimate, divergence form, `a` not necessarily symmetric (Giaquinta–Martinazzi; Gilbarg–Trudinger) | `Div.contDiffHolderOn_one_of_isWeakSolution`, `Div.c1Holder_ball_estimate` |
 | | `div-conormal-c1alpha` | conormal flat-boundary `C^{1,α}` regularity and the scaled estimate at an arbitrary centre, `a` symmetric (Giaquinta–Martinazzi; Gilbarg–Trudinger (Dirichlet analogue)) | `Div.contDiffHolderOn_one_halfBall_of_isConormalSolution`, `Div.c1Holder_halfBall_estimate` |
 | | `div-strong-weak-reflection` | strong solutions of the linear and quasilinear conormal problems are weak solutions; the even reflection of a conormal weak solution with measurable coefficients solves the reflected problem on the full ball | `Div.isConormalSolOn_of_strong`, `Div.isQuasilinearConormalSolOn_of_strong`, `Div.IsConormalSolOn.evenReflect` |
 | | `div-conormal-c2alpha` | linear conormal `C^{2,α}` regularity from `C^{1,α}` coefficients | `Div.contDiffHolderOn_two_halfBall_of_c1Holder_coeff` |
 | | `div-quasilinear-conormal` | `C^{k+1}` regularity of `C¹` quasilinear conormal weak solutions of `div Φ(∇w) = 0`, and the scaled small-gradient estimate of `∇w` and `D²w` at the centre | `Div.contDiffOn_halfBall_of_quasilinear_conormal`, `Div.quasilinear_conormal_estimate` |
 | | `campanato-characterization` | Campanato's characterization of Hölder continuity on closed half balls (Campanato 1963; Giaquinta–Martinazzi) | `holderOnWith_of_campanato` |
-| `nondivergence-form` | `nondiv-interior-schauder` | interior Schauder regularity and the scaled estimate, nondivergence form (Gilbarg–Trudinger) | `Nondiv.contDiffHolderOn_two_of_isSolution`, `Nondiv.schauder_ball_estimate` |
+| | `nondiv-interior-schauder` | interior Schauder regularity and the scaled estimate, nondivergence form (Gilbarg–Trudinger) | `Nondiv.contDiffHolderOn_two_of_isSolution`, `Nondiv.schauder_ball_estimate` |
 | | `nondiv-boundary-schauder` | flat-boundary Schauder regularity, nondivergence form, under the conormal-compatible condition or the Dirichlet condition (Gilbarg–Trudinger, flat case) | `Nondiv.schauder_halfBall_conormal`, `Nondiv.schauder_halfBall_dirichlet` |
 | | `polynomial-approximation-bridge` | uniform pointwise second-order polynomial approximation on a bounded convex set with nonempty interior gives `C^{2,α}`, with `Du = P1` | `contDiffHolderOn_two_of_polyApprox` |
 
-A Comparator failure is reported per workspace; its log names the theorem that failed.
+A Comparator failure names the theorem that failed in its log.
 
 These are the 16 headline theorems of the README and `scripts/check_axioms.lean`. The statements
 are spelled out in full in each `Challenge.lean`; they do not refer to the library's `…Statement`
@@ -93,15 +89,15 @@ which a headline theorem applies).
   toolchain, so there are no separate tool revisions; `formalization.yaml` records
   `engine: "lake comparator"`.
 
-Every workspace sets `packagesDir = "../../.lake/packages"` in its `lakefile.toml` (and records
-the same folder in its `lake-manifest.json`), so both share the root workspace's dependency
-checkouts and builds. The manifests lock the same revisions as the root manifest. Each workspace
+The workspace sets `packagesDir = "../../.lake/packages"` in its `lakefile.toml` (and records
+the same folder in its `lake-manifest.json`), so it shares the root workspace's dependency
+checkouts and builds. The manifest locks the same revisions as the root manifest. The workspace
 defaults to its `Vocabulary` and `Challenge` targets only, so a plain `lake build` never
-elaborates `Solution.lean`. The workspaces set `autoImplicit = false`.
+elaborates `Solution.lean`. The workspace sets `autoImplicit = false`.
 
 ## Acceptance
 
-In a trusted checkout, build the root library first, then the workspaces, then run the local
+In a trusted checkout, build the root library first, then the workspace, then run the local
 checks:
 
 ```sh
@@ -116,12 +112,12 @@ and `Quot.sound`. It does not compare statements. `scripts/build-challenges.sh -
 builds the same targets without the axiom check.
 
 `scripts/fingerprint-challenges.sh` emulates Comparator's statement and definition-equality
-check. For each workspace, it hashes the types and definition values of the challenge theorems and
+check. For the workspace, it hashes the types and definition values of the challenge theorems and
 of every `BasicElliptic` constant they depend on, once in the `Challenge` environment and once in
 the `Solution` environment, and diffs the results. It does not replay proofs or check axioms.
 
 For a Comparator release run, treat `Solution.lean` as potentially adversarial, and review and
-trust each workspace's `Vocabulary.lean`, `Challenge.lean`, `lakefile.toml`, `lake-manifest.json`,
+trust the workspace's `Vocabulary.lean`, `Vocabulary/*.lean`, `Challenge.lean`, `lakefile.toml`, `lake-manifest.json`,
 `lean-toolchain` and `config.json`. The release workflow `.github/workflows/release-comparator.yml`
 (dispatched by hand, and run on `release/**` branches) then:
 
@@ -130,20 +126,20 @@ trust each workspace's `Vocabulary.lean`, `Challenge.lean`, `lakefile.toml`, `la
 2. prepares the comparator sandbox: bubblewrap and unprivileged user namespaces
    (`scripts/release-comparator.sh install`);
 3. builds only the trusted `Vocabulary` and `Challenge` targets outside the sandbox;
-4. runs `lake comparator --paranoid` in its sandbox on each workspace's `config.json`, without
+4. runs `lake comparator --paranoid` in its sandbox on the workspace's `config.json`, without
    first building `Solution` (`scripts/release-comparator.sh run`). The sandbox hides home
    directories, so the script judges a copy of the repository outside `/home`. This checks
    statement and definition equality and that each theorem depends only on `propext`,
    `Classical.choice` and `Quot.sound`;
 5. uploads an attestation (`comparator-report/attestation.json` and the logs).
 
-Per-commit CI only elaborates the workspaces and checks the solutions' axioms; exact equality
+Per-commit CI only elaborates the workspace and checks the solutions' axioms; exact equality
 between the trusted statements and the solution statements is checked only by the release
 comparator workflow.
 
 **Status.**
 - Both build-challenges modes are green locally.
-- `fingerprint-challenges.sh` reports both workspaces IDENTICAL.
+- `fingerprint-challenges.sh` reports the workspace IDENTICAL.
 - `check-challenges.sh` reports exactly the three permitted axioms for all 16 solution theorems.
 - Each release is checked by a comparator run on the public commit, and its attestation is
   attached to the GitHub release.

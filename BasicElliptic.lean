@@ -70,6 +70,14 @@ public import BasicElliptic.Div.Quasilinear.HigherOrder
 public import BasicElliptic.Div.Quasilinear.Induction
 public import BasicElliptic.Div.Quasilinear.SecondOrder
 public import BasicElliptic.Div.Quasilinear.SmallOscillation
+public import BasicElliptic.Div.Quasilinear.Three.Assemble
+public import BasicElliptic.Div.Quasilinear.Three.Canonical
+public import BasicElliptic.Div.Quasilinear.Three.FirstOrder
+public import BasicElliptic.Div.Quasilinear.Three.FlatFlux
+public import BasicElliptic.Div.Quasilinear.Three.SecondOrder
+public import BasicElliptic.Div.Quasilinear.Three.Tensor
+public import BasicElliptic.Div.Quasilinear.Three.ThirdOrder
+public import BasicElliptic.Div.Quasilinear.Three.UniformHolder
 public import BasicElliptic.Div.Quasilinear.Main
 public import BasicElliptic.Nondiv.Interior.PolyOps
 public import BasicElliptic.Nondiv.Interior.Step

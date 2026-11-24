@@ -12,7 +12,12 @@
     "BasicElliptic.challenge_contDiffHolderOn_two_halfBall_of_c1Holder_coeff",
     "BasicElliptic.challenge_contDiffOn_halfBall_of_quasilinear_conormal",
     "BasicElliptic.challenge_quasilinear_conormal_estimate",
-    "BasicElliptic.challenge_holderOnWith_of_campanato"
+    "BasicElliptic.challenge_contDiffHolderOn_two_of_isSolution",
+    "BasicElliptic.challenge_schauder_ball_estimate",
+    "BasicElliptic.challenge_schauder_halfBall_conormal",
+    "BasicElliptic.challenge_schauder_halfBall_dirichlet",
+    "BasicElliptic.challenge_holderOnWith_of_campanato",
+    "BasicElliptic.challenge_contDiffHolderOn_two_of_polyApprox"
   ],
   "permitted_axioms": [
     "propext",

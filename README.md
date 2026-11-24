@@ -10,7 +10,7 @@ Regularity is **qualitative**. Solutions are assumed only `C¹` up to the flat b
 nondivergence form. The theorems prove that they are `C^{k,α}`, with scaled estimates whose constants are chosen
 before the solution.
 
-The library has about 28,300 lines of Lean in 88 files (87 under `BasicElliptic/` plus the root `BasicElliptic.lean`).
+The library has about 31,200 lines of Lean in 96 files (95 under `BasicElliptic/` plus the root `BasicElliptic.lean`).
 Every file is a Lean module, and everything lives in the namespace `BasicElliptic`.
 
 **Status.** Every headline theorem is proved. The library contains no `sorry`, `admit`, `axiom` or `native_decide`, and
@@ -42,6 +42,13 @@ Each headline is a `…Statement : Prop` in `BasicElliptic/Statements/*`, and th
 | Boundary Schauder, Dirichlet condition | GT | `Nondiv.schauder_halfBall_dirichlet` | ✓ |
 | Campanato's characterization of `C^α` on half balls | GM; Campanato | `holderOnWith_of_campanato` | ✓ |
 | Polynomial approximation ⇒ `C^{2,α}` on a convex body | Caffarelli; GT | `contDiffHolderOn_two_of_polyApprox` | ✓ |
+
+**Further result.** `Div.quasilinear_conormal_estimate_three` proves
+`Div.QuasilinearConormalEstimateThreeStatement`, the standard scaled higher-order boundary estimate for the quasilinear
+conormal problem: `r |∇w(x)|`, `r² |D²w(x)|` and `r³ |D³w(x)|` are at most `C osc w` for solutions with small gradient,
+with `η` and `C` depending only on the dimension, the ellipticity `lam`, a bound `M` on `DΦ`, `D²Φ`, `D³Φ` and the
+radius `δ` of the ball on which `Φ` is given; they are uniform in the unit normal `ν` and in `Φ`. It has the same
+three axioms (`scripts/check_axioms.lean`) and is listed in `formalization.yaml`; it has no comparator workspace.
 
 Toolkit results are cited in their docstrings. They include:
 - the Campanato iteration lemma (`campanato_iteration`) and the absorption lemma (`le_of_absorption`);
@@ -82,7 +89,7 @@ Run from the repository root after `lake exe cache get`. CI (`.github/workflows/
 ```bash
 lake build --wfail 2>&1 | tee build.log                 # the library, warnings as errors
 python3 scripts/check_integrity.py --build-log build.log
-lake env lean scripts/check_axioms.lean                 # axioms of the 16 headline theorems
+lake env lean scripts/check_axioms.lean                 # axioms of the headline theorems
 ruby scripts/check-formalization-manifest.rb            # formalization.yaml: names, axioms, pins
 python3 scripts/check_notation.py                       # binder precedence in the statement definitions
 scripts/check-challenges.sh                             # challenge workspaces elaborate; solution axioms
@@ -97,7 +104,7 @@ python3 scripts/challenge-prep.py check                 # challenge vocabulary i
   declaration listed in `formalization.yaml`. It also checks the toolchain and dependency pins against
   `lake-manifest.json`.
 - **Comparator challenges.** [`challenges/`](challenges/README.md) restates all 16 headline theorems over Mathlib
-  alone, in two workspaces (divergence form and nondivergence form). CI only checks that the challenges and solutions
+  alone, in one workspace (`challenges/main-results`). CI only checks that the challenges and solutions
   elaborate and that the solutions use the three standard axioms. Statement equality is checked by
   the toolchain's `lake comparator --paranoid` in the release workflow
   (`.github/workflows/release-comparator.yml`), whose attestation is attached to each GitHub release.

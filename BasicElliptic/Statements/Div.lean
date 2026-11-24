@@ -233,6 +233,30 @@ def QuasilinearConormalEstimateStatement : Prop :=
         r ^ 2 * ‖fderivWithin ℝ (fderivWithin ℝ w (halfBall ν x r)) (halfBall ν x r) x‖ ≤
           C * regionOsc w (halfBall ν x r)
 
+/-- **Scaled third-order quasilinear conormal estimate, uniform in the structure** (GM, applied
+to the once- and twice-differentiated equations). Fix `lam, M, δ > 0`. There are `η > 0` and `C`,
+depending only on `E`, `lam`, `M` and `δ`, such that for every unit `ν` and every `Φ ∈ C³` on
+`ball 0 δ` with `DΦ` symmetric and `lam`-elliptic and `‖DΦ‖, ‖D²Φ‖, ‖D³Φ‖ ≤ M` there, every
+quasilinear conormal weak solution `w ∈ C¹(halfBall ν x r)` with `|∇w| ≤ η` on the half ball
+satisfies, at the centre, `r |∇w(x)|`, `r² |D²w(x)|` and `r³ |D³w(x)| ≤ C osc w`
+(derivatives within the closed half ball). This is the standard higher-order boundary estimate
+with constants uniform in the structure bounds.
+Proved by `Div.quasilinear_conormal_estimate_three` (`Div/Quasilinear/Main.lean`). -/
+def QuasilinearConormalEstimateThreeStatement : Prop :=
+  ∀ (lam M δ : ℝ), 0 < lam → 0 < δ → ∃ η > 0, ∃ C : ℝ,
+    ∀ (ν : E) (Φ : E → E), ‖ν‖ = 1 → ContDiffOn ℝ 3 Φ (ball 0 δ) →
+      (∀ p ∈ ball (0 : E) δ, ∀ ξ : E, lam * ‖ξ‖ ^ 2 ≤ ⟪fderiv ℝ Φ p ξ, ξ⟫) →
+      (∀ p ∈ ball (0 : E) δ, (fderiv ℝ Φ p : E →ₗ[ℝ] E).IsSymmetric) →
+      (∀ p ∈ ball (0 : E) δ, ‖fderiv ℝ Φ p‖ ≤ M ∧ ‖iteratedFDeriv ℝ 2 Φ p‖ ≤ M ∧
+        ‖iteratedFDeriv ℝ 3 Φ p‖ ≤ M) →
+      ∀ (x : E) (r : ℝ) (w : E → ℝ), 0 < r → -r < ⟪x, ν⟫ →
+        IsQuasilinearConormalSolOn ν Φ x r w →
+        (∀ y ∈ halfBall ν x r, ‖gradientWithin w (halfBall ν x r) y‖ ≤ η) →
+        r * ‖fderivWithin ℝ w (halfBall ν x r) x‖ ≤ C * regionOsc w (halfBall ν x r) ∧
+        r ^ 2 * ‖fderivWithin ℝ (fderivWithin ℝ w (halfBall ν x r)) (halfBall ν x r) x‖ ≤
+          C * regionOsc w (halfBall ν x r) ∧
+        r ^ 3 * ‖iteratedFDerivWithin ℝ 3 w (halfBall ν x r) x‖ ≤ C * regionOsc w (halfBall ν x r)
+
 end Div
 
 end BasicElliptic

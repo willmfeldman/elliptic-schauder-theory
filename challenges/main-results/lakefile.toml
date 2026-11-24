@@ -1,4 +1,4 @@
-name = "divergence_form"
+name = "main_results"
 version = "0.1.0"
 # Keep `lake build` safe for the comparator workflow: it elaborates only the
 # trusted statement surface. The repository driver builds `Solution`

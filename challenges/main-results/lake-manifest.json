@@ -119,6 +119,6 @@
    "inputRev": "v4.36.0",
    "inherited": true,
    "configFile": "lakefile.toml"}],
- "name": "divergence_form",
+ "name": "main_results",
  "lakeDir": ".lake",
  "fixedToolchain": false}

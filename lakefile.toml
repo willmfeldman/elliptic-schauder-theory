@@ -1,5 +1,5 @@
 name = "basic_elliptic_theory"
-version = "0.2.0"
+version = "0.2.1"
 description = "Basic elliptic theory: Hölder spaces and interior and flat-boundary Schauder theory (divergence and nondivergence form)"
 keywords = ["math"]
 defaultTargets = ["BasicElliptic"]

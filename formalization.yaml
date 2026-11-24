@@ -80,7 +80,7 @@ targets:
       necessarily symmetric) and C^α, G ∈ C^α and f bounded and measurable, is C^{1,α} on every
       closed ball in U, with a scaled estimate whose constant depends only on the dimension, α,
       the ellipticity constants and a bound on the scale-invariant Hölder seminorm of a.
-    challenge: challenges/divergence-form
+    challenge: challenges/main-results
     challenge_theorems:
       - BasicElliptic.challenge_contDiffHolderOn_one_of_isWeakSolution
       - BasicElliptic.challenge_c1Holder_ball_estimate
@@ -99,7 +99,7 @@ targets:
       need not vanish on the flat part), with a symmetric, uniformly elliptic and C^α, G ∈ C^α and
       f bounded, is C^{1,α} on the half ball of half the radius, with a scaled estimate at an
       arbitrary centre.
-    challenge: challenges/divergence-form
+    challenge: challenges/main-results
     challenge_theorems:
       - BasicElliptic.challenge_contDiffHolderOn_one_halfBall_of_isConormalSolution
       - BasicElliptic.challenge_c1Holder_halfBall_estimate
@@ -118,7 +118,7 @@ targets:
       Pointwise strong solutions of the linear and quasilinear conormal problems are weak
       solutions, and the even reflection of a conormal weak solution solves the reflected problem
       on the full ball, with measurable coefficients.
-    challenge: challenges/divergence-form
+    challenge: challenges/main-results
     challenge_theorems:
       - BasicElliptic.challenge_isConormalSolOn_of_strong
       - BasicElliptic.challenge_isQuasilinearConormalSolOn_of_strong
@@ -134,7 +134,7 @@ targets:
     informal: >
       With a symmetric, uniformly elliptic and C^{1,α}, G ∈ C^{1,α} and f ∈ C^α on a closed half
       ball, a conormal weak solution w ∈ C¹ is C^{2,α} on the half ball of half the radius.
-    challenge: challenges/divergence-form
+    challenge: challenges/main-results
     challenge_theorems:
       - BasicElliptic.challenge_contDiffHolderOn_two_halfBall_of_c1Holder_coeff
 
@@ -147,12 +147,15 @@ targets:
     declaration: BasicElliptic.Div.contDiffOn_halfBall_of_quasilinear_conormal
     related_declarations:
       - BasicElliptic.Div.quasilinear_conormal_estimate
+      - BasicElliptic.Div.quasilinear_conormal_estimate_three
     informal: >
       For Φ ∈ C^{k+1} with DΦ uniformly elliptic and symmetric on an open convex set U, a C¹
       quasilinear conormal weak solution of div Φ(∇w) = 0 with ∇w in U is C^{k+1} on the half ball
       of half the radius; with Φ ∈ C², there are η > 0 and C such that |∇w| ≤ η gives r|∇w(x)| +
-      r²|D²w(x)| ≤ C osc w at the centre.
-    challenge: challenges/divergence-form
+      r²|D²w(x)| ≤ C osc w at the centre. The third-order form adds r³|D³w(x)| ≤ C osc w, with η
+      and C depending only on the dimension, lam, a bound M on DΦ, D²Φ, D³Φ and the radius δ of
+      the ball on which Φ is given (uniform in the unit normal and in Φ).
+    challenge: challenges/main-results
     challenge_theorems:
       - BasicElliptic.challenge_contDiffOn_halfBall_of_quasilinear_conormal
       - BasicElliptic.challenge_quasilinear_conormal_estimate
@@ -169,7 +172,7 @@ targets:
     informal: >
       A C² solution of tr(a D²w) + ⟪b, ∇w⟫ = f on an open set, with a uniformly elliptic and a, b,
       f ∈ C^α, is C^{2,α} on every closed ball inside, with a scaled estimate.
-    challenge: challenges/nondivergence-form
+    challenge: challenges/main-results
     challenge_theorems:
       - BasicElliptic.challenge_contDiffHolderOn_two_of_isSolution
       - BasicElliptic.challenge_schauder_ball_estimate
@@ -188,7 +191,7 @@ targets:
       a, b, f ∈ C^α, is C^{2,α} on the half ball of half the radius under either the
       conormal-compatible condition ⟪aν, ∇w⟫ = γ (a symmetric, aν and γ of class C^{1,α}) or the
       Dirichlet condition w = g with g ∈ C^{2,α}.
-    challenge: challenges/nondivergence-form
+    challenge: challenges/main-results
     challenge_theorems:
       - BasicElliptic.challenge_schauder_halfBall_conormal
       - BasicElliptic.challenge_schauder_halfBall_dirichlet
@@ -204,7 +207,7 @@ targets:
       A function continuous on a closed half ball whose mean-square oscillation over every ball
       intersected with the half ball is at most M² ρ^{2α} is α-Hölder there with constant C M, C =
       C(E, α).
-    challenge: challenges/divergence-form
+    challenge: challenges/main-results
     challenge_theorems:
       - BasicElliptic.challenge_holderOnWith_of_campanato
 
@@ -219,7 +222,7 @@ targets:
       If u is approximated at every point of a bounded convex set with nonempty interior by
       quadratic polynomials to order 2 + α, uniformly, then u is C^{2,α} on the set, with
       derivatives within the set.
-    challenge: challenges/nondivergence-form
+    challenge: challenges/main-results
     challenge_theorems:
       - BasicElliptic.challenge_contDiffHolderOn_two_of_polyApprox
 
@@ -227,13 +230,11 @@ comparator:
   external_challenges:
     directory: "challenges"
     purpose: >-
-      Standalone comparator challenge workspaces, grouped by the library modules their solutions
-      import: divergence-form (the divergence-form targets and Campanato's characterization) and
-      nondivergence-form (the nondivergence-form targets and the polynomial-approximation bridge).
-      Each target's challenge and challenge_theorems fields name its workspace and theorems. In each, Vocabulary.lean restates the library definitions the
-      statements use over Mathlib only, Challenge.lean states the claims with `sorry` (with the
-      vocabulary copied into a generated block, so it imports Mathlib only), and Solution.lean
-      imports BasicElliptic and proves the same statements.
+      One standalone comparator challenge workspace, main-results, holding every challenge
+      statement. Each target's challenge and challenge_theorems fields name the workspace and its
+      theorems. Vocabulary/*.lean restate the library definitions the statements use over Mathlib
+      only, one module per library file; Challenge.lean imports them and states the claims with
+      `sorry`, and Solution.lean imports BasicElliptic and proves the same statements.
     release_workflow: ".github/workflows/release-comparator.yml"
     engine: "lake comparator"
     toolchain: "leanprover/lean4:v4.36.0"

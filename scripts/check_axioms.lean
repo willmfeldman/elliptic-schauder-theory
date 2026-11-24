@@ -8,14 +8,15 @@ module
 import BasicElliptic
 
 /-!
-# Axiom check for the 16 headline theorems (release gate)
+# Axiom check for the 16 headline theorems and the third-order estimate (release gate)
 
 Checked with `lake env lean scripts/check_axioms.lean` (CI). Each `#guard_msgs` fails the
 elaboration unless `#print axioms` reports exactly `propext`, `Classical.choice` and
 `Quot.sound` (in particular no `sorryAx` and no extra axiom); whitespace is compared laxly
 because the message is line-wrapped by the pretty printer. The list is the README headline
-table; `formalization.yaml` lists the same names and `scripts/check-formalization-manifest.rb`
-checks them independently.
+table, followed by the uniform third-order estimate (README, "Further result");
+`formalization.yaml` lists the same names and `scripts/check-formalization-manifest.rb` checks
+them independently.
 -/
 
 /--
@@ -87,6 +88,13 @@ info: 'BasicElliptic.Div.quasilinear_conormal_estimate'
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms BasicElliptic.Div.quasilinear_conormal_estimate
+
+/--
+info: 'BasicElliptic.Div.quasilinear_conormal_estimate_three'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms BasicElliptic.Div.quasilinear_conormal_estimate_three
 
 /--
 info: 'BasicElliptic.Nondiv.contDiffHolderOn_two_of_isSolution'

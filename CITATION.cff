@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this Lean formalization, please cite it using this metadata."
 title: "elliptic-schauder-theory: Hölder spaces and flat-boundary Schauder theory in Lean"
-version: "0.2.0"
+version: "0.2.1"
 date-released: "2026-11-24"
 license: "Apache-2.0"
 repository-code: "https://github.com/willmfeldman/elliptic-schauder-theory"
@@ -14,7 +14,8 @@ abstract: >-
   divergence form (L² Campanato on the gradient field, conormal boundary condition) and in
   nondivergence form (sup-norm Campanato, conormal-compatible and Dirichlet boundary
   conditions); and C^{k+1} regularity up to the flat boundary and scaled estimates for the
-  quasilinear conormal problem div Φ(∇w) = 0.
+  quasilinear conormal problem div Φ(∇w) = 0, including a scaled third-order boundary estimate
+  with constants uniform in the structure bounds.
 keywords:
   - Lean
   - Mathlib

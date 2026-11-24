@@ -485,7 +485,7 @@ theorem campanato_decay_at_flat_point {α : ℝ≥0} (hα : 0 < α) (hα1 : α <
       _ = _ := by field_simp
   have hftm : AEStronglyMeasurable ft (volume.restrict Bt) :=
     (aestronglyMeasurable_comp_affine M x₀ hfm).mono_measure
-      (Measure.restrict_mono hTB le_rfl)
+      (Measure.restrict_mono (show Bt ⊆ T ⁻¹' halfBall ν x₀ δ from hTB) le_rfl)
   have hftb : ∀ z ∈ Bt, |ft z| ≤ Mf := fun z hz ↦ hfb _ (hTB z hz)
   -- the transported gradient
   have hxR : -R < ⟪(0 : E), ν⟫ := by rw [inner_zero_left]; linarith
@@ -583,7 +583,7 @@ theorem campanato_decay_at_flat_point {α : ℝ≥0} (hα : 0 < α) (hα1 : α <
     refine (setIntegral_norm_sub_setAverage_sq_le hfin (hgi.mono_set hsubB)
       (hgi2.mono_set hsubB) c).trans ?_
     exact setIntegral_mono_set (hgc.mono_set hTBρ) (Eventually.of_forall fun _ ↦ sq_nonneg _)
-      hsubS.eventuallyLE
+      hsubS.eventuallySubset
   -- step 2: change of variables
   have hTinj : Function.Injective T := fun z z' h ↦ M.injective (add_left_cancel h)
   have hdet0 : LinearMap.det (M : E →ₗ[ℝ] E) ≠ 0 :=
@@ -632,7 +632,7 @@ theorem campanato_decay_at_flat_point {α : ℝ≥0} (hα : 0 < α) (hα1 : α <
       _ = (1 / l) ^ 2 * ∫ z in ball 0 ρt ∩ halfSpace ν, ‖F z - ct‖ ^ 2 := integral_const_mul _ _
       _ ≤ (1 / l) ^ 2 * ∫ z in ball 0 ρt, ‖F z - ct‖ ^ 2 :=
           mul_le_mul_of_nonneg_left (setIntegral_mono_set hFi
-            (Eventually.of_forall fun _ ↦ sq_nonneg _) inter_subset_left.eventuallyLE)
+            (Eventually.of_forall fun _ ↦ sq_nonneg _) inter_subset_left.eventuallySubset)
             (by positivity)
   have hdet := abs_det_le_pow_of_norm_le hs hMn
   have hψt0 : 0 ≤ ∫ z in ball 0 ρt, ‖F z - ct‖ ^ 2 :=

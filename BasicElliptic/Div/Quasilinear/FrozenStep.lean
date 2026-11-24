@@ -448,7 +448,7 @@ theorem flat_frozen_step {ν : E} (hν : ‖ν‖ = 1) :
         abel
     have h3 : ∫ y in Sρ, ‖F y - mF‖ ^ 2 ≤ ∫ y in ball x ρ, ‖F y - mF‖ ^ 2 :=
       setIntegral_mono_set hFρint (Eventually.of_forall fun _ ↦ sq_nonneg _)
-        inter_subset_left.eventuallyLE
+        inter_subset_left.eventuallySubset
     linarith
   -- upper bound for `∫_{B_r} ‖F‖²`
   have hcont_p : ContinuousOn (fun y ↦ ‖gW y - p‖ ^ 2) B := (hgc.sub continuousOn_const).norm.pow 2
@@ -474,7 +474,7 @@ theorem flat_frozen_step {ν : E} (hν : ‖ν‖ = 1) :
     rw [(setIntegral_ball_eq_halfBall_add_reflect hν hx i1 i2).2, setIntegral_congr_fun hBm hBH,
       setIntegral_congr_fun hOm hR]
     have : ∫ y in ball x r ∩ openHalfSpace ν, ‖gW y - p‖ ^ 2 ≤ ∫ y in B, ‖gW y - p‖ ^ 2 :=
-      setIntegral_mono_set hint_p (Eventually.of_forall fun _ ↦ sq_nonneg _) hsubO.eventuallyLE
+      setIntegral_mono_set hint_p (Eventually.of_forall fun _ ↦ sq_nonneg _) hsubO.eventuallySubset
     linarith
   set ψr := ∫ y in S, ‖gW y - m‖ ^ 2 with hψr
   have hψr0 : 0 ≤ ψr := setIntegral_nonneg hSm fun _ _ ↦ sq_nonneg _

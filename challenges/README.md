@@ -84,14 +84,14 @@ which a headline theorem applies).
 
 ## Toolchain
 
-- Lean: `leanprover/lean4:v4.35.0-rc3`
-- Mathlib: `v4.35.0-rc3` (`c55e6e7`)
-- viscosity_solns `v0.4.0` and AleksandrovDifferentiability `v0.4.0`: pinned through the parent
+- Lean: `leanprover/lean4:v4.36.0`
+- Mathlib: `v4.36.0` (`fc4f59e`)
+- viscosity_solns `v0.5.0` and AleksandrovDifferentiability `v0.5.0`: pinned through the parent
   `lake-manifest.json`
-- Comparator: `leanprover/comparator` at `fd5d5bcf14177b187f66d4502071268d877887c3`, with
-  lean4export `66f1fb4bc256072069767fce52d39480e4524869` and landrun
-  `811cfff51ceaf3d9843708aa6d22e9b84ccac8b4`, pinned in `scripts/release-comparator.sh` and
-  recorded in `formalization.yaml`
+- Comparator: the toolchain's own `lake comparator`, run with `--paranoid` (every external checker
+  bundled with the toolchain) in Lake's bubblewrap sandbox. It ships with the pinned Lean
+  toolchain, so there are no separate tool revisions; `formalization.yaml` records
+  `engine: "lake comparator"`.
 
 Every workspace sets `packagesDir = "../../.lake/packages"` in its `lakefile.toml` (and records
 the same folder in its `lake-manifest.json`), so both share the root workspace's dependency
@@ -123,16 +123,18 @@ the `Solution` environment, and diffs the results. It does not replay proofs or 
 For a Comparator release run, treat `Solution.lean` as potentially adversarial, and review and
 trust each workspace's `Vocabulary.lean`, `Challenge.lean`, `lakefile.toml`, `lake-manifest.json`,
 `lean-toolchain` and `config.json`. The release workflow `.github/workflows/release-comparator.yml`
-(dispatched by hand, and run on `release/**` branches and `v*` tags) then:
+(dispatched by hand, and run on `release/**` branches) then:
 
 1. validates the challenge inventory against `formalization.yaml`
    (`scripts/check-formalization-manifest.rb --metadata-only`);
-2. installs the pinned Comparator tools (`scripts/release-comparator.sh install`);
+2. prepares the comparator sandbox: bubblewrap and unprivileged user namespaces
+   (`scripts/release-comparator.sh install`);
 3. builds only the trusted `Vocabulary` and `Challenge` targets outside the sandbox;
-4. runs Comparator in its sandbox on each workspace's `config.json`, without first building
-   `Solution` (`scripts/release-comparator.sh run`), which checks statement and definition
-   equality and that each theorem depends only on `propext`, `Classical.choice` and
-   `Quot.sound`;
+4. runs `lake comparator --paranoid` in its sandbox on each workspace's `config.json`, without
+   first building `Solution` (`scripts/release-comparator.sh run`). The sandbox hides home
+   directories, so the script judges a copy of the repository outside `/home`. This checks
+   statement and definition equality and that each theorem depends only on `propext`,
+   `Classical.choice` and `Quot.sound`;
 5. uploads an attestation (`comparator-report/attestation.json` and the logs).
 
 Per-commit CI only elaborates the workspaces and checks the solutions' axioms; exact equality
@@ -143,8 +145,8 @@ comparator workflow.
 - Both build-challenges modes are green locally.
 - `fingerprint-challenges.sh` reports both workspaces IDENTICAL.
 - `check-challenges.sh` reports exactly the three permitted axioms for all 16 solution theorems.
-- No Comparator run has been recorded yet. Each release is checked by a Comparator run on the
-  public commit, and its attestation is attached to the GitHub release.
+- Each release is checked by a comparator run on the public commit, and its attestation is
+  attached to the GitHub release.
 
 ## References
 

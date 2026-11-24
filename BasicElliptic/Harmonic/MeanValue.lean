@@ -7,6 +7,7 @@ module
 
 public import BasicElliptic.Harmonic.Basic
 import Mathlib.MeasureTheory.Function.L2Space
+import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 
 /-!
 # Mean-value property of harmonic functions

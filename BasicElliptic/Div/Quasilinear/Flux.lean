@@ -165,7 +165,7 @@ private theorem fluxK_normal_neg {ν : E} (hν : ‖ν‖ = 1) : fluxK ν ν < 0
   have h1 : ∫ z in ball z₀ δ, -f z ≤ ∫ z in halfSpace ν, -f z :=
     setIntegral_mono_set hint.integrableOn
       ((ae_restrict_iff' (measurableSet_halfSpace ν)).2 (Eventually.of_forall hfneg))
-      hsub.eventuallyLE
+      hsub.eventuallySubset
   have h2 : (-(f z₀) / 2) * volume.real (ball z₀ δ) ≤ ∫ z in ball z₀ δ, -f z :=
     setIntegral_ge_of_const_le_real measurableSet_ball measure_ball_lt_top.ne
       (fun z hz ↦ by have := (hball hz).1; simp only [mem_ofPred_eq] at this; linarith)

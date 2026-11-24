@@ -444,7 +444,7 @@ theorem gradient_campanato_at_point_osc {α : ℝ≥0} (hα : 0 < α) (hα1 : α
     have hcov := setIntegral_comp_affine M x₀ (fun y ↦ ‖∇ w y - c‖ ^ 2) (T '' ball 0 (δ / s))
     rw [Set.preimage_image_eq _ hTinj] at hcov
     have hmono : ∫ y in T '' ball 0 (δ / s), ‖∇ w y - c‖ ^ 2 ≤ Ψ :=
-      setIntegral_mono_set hgcδ (Eventually.of_forall fun _ ↦ sq_nonneg _) hTBR.eventuallyLE
+      setIntegral_mono_set hgcδ (Eventually.of_forall fun _ ↦ sq_nonneg _) hTBR.eventuallySubset
     have hTint : Integrable (fun z ↦ ‖∇ w (x₀ + M z) - c‖ ^ 2)
         (volume.restrict (ball (0 : E) (δ / s))) := by
       refine Integrable.of_bound (C := (M₀ + ‖c‖) ^ 2) ?_ ?_
@@ -498,7 +498,7 @@ theorem gradient_campanato_at_point_osc {α : ℝ≥0} (hα : 0 < α) (hα1 : α
       (IntegrableOn.mono_set (hgL.integrable one_le_two) hsubδ)
       (IntegrableOn.mono_set (integrable_norm_sq' hgL) hsubδ) c').trans ?_
     exact setIntegral_mono_set (hgc.mono_set hTB) (Eventually.of_forall fun _ ↦ sq_nonneg _)
-      (inter_subset_left.trans hBT).eventuallyLE
+      (inter_subset_left.trans hBT).eventuallySubset
   have hcov := setIntegral_comp_affine M x₀ (fun y ↦ ‖∇ w y - c'‖ ^ 2) (T '' ball 0 ρt)
   rw [Set.preimage_image_eq _ hTinj] at hcov
   have hs2 : ∫ y in T '' ball 0 ρt, ‖∇ w y - c'‖ ^ 2 =

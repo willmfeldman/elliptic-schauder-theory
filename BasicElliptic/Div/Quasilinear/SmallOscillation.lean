@@ -130,7 +130,7 @@ private theorem comparison' {Ch : ℝ} (hCh : 0 ≤ Ch)
     simpa only [add_comm] using this
   have sf : ∫ y in ball x₀ ρ, ‖F y - V y‖ ^ 2 ≤ D :=
     setIntegral_mono_set (integrable_norm_sq' hFVL) (Eventually.of_forall fun _ ↦ sq_nonneg _)
-      hρsub.eventuallyLE
+      hρsub.eventuallySubset
   set q := (ρ / r) ^ (finrank ℝ E + 2)
   have hq0 : 0 ≤ q := by positivity
   have hq1 : q ≤ 1 := pow_le_one₀ (by positivity) ((div_le_one hr).2 hρr)

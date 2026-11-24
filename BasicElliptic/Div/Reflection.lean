@@ -398,7 +398,7 @@ private theorem aestronglyMeasurable_reflect {X : Type*} [TopologicalSpace X]
     funext y
     by_cases h : 0 ≤ ⟪y, ν⟫ <;> simp [Set.piecewise, h]
   rw [hfun]
-  refine AEStronglyMeasurable.piecewise (measurableSet_halfSpace ν) ?_ ?_
+  refine AEStronglyMeasurable.piecewise (measurableSet_halfSpace ν).nullMeasurableSet ?_ ?_
   · rw [Measure.restrict_restrict (measurableSet_halfSpace ν)]
     have hsub : halfSpace ν ∩ ball x r ⊆ halfBall ν x r := fun y hy ↦
       ⟨ball_subset_closedBall hy.2, hy.1⟩

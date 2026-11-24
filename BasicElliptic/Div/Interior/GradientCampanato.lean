@@ -373,7 +373,7 @@ theorem gradient_campanato_at_point {α : ℝ≥0} (hα : 0 < α) (hα1 : α < 1
       (IntegrableOn.mono_set (hgL.integrable one_le_two) hsubδ)
       (IntegrableOn.mono_set (integrable_norm_sq' hgL) hsubδ) c).trans ?_
     exact setIntegral_mono_set (hgc.mono_set hTB) (Eventually.of_forall fun _ ↦ sq_nonneg _)
-      (inter_subset_left.trans hBT).eventuallyLE
+      (inter_subset_left.trans hBT).eventuallySubset
   -- step 2: change of variables
   have hTinj : Function.Injective T := fun z z' h ↦ M.injective (add_left_cancel h)
   have hdet0 : LinearMap.det (M : E →ₗ[ℝ] E) ≠ 0 :=

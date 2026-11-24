@@ -159,7 +159,7 @@ theorem harmonic_campanato_decay :
   · -- trivial range `ρ > r/4`
     have h1 : ∫ y in ball x ρ, ‖V y - a‖ ^ 2 ∂μ ≤ A :=
       setIntegral_mono_set (integrableOn_ball_sub_sq hVc hint a)
-        (Eventually.of_forall fun _ ↦ sq_nonneg _) hsubρ.eventuallyLE
+        (Eventually.of_forall fun _ ↦ sq_nonneg _) hsubρ.eventuallySubset
     have h2 : (1 : ℝ) ≤ 4 ^ (d + 2) * (ρ / r) ^ (d + 2) := by
       rw [← mul_pow]
       refine one_le_pow₀ ?_
@@ -192,7 +192,7 @@ theorem harmonic_campanato_decay :
     have hmono : ∫ z in ball y (r / 2), ‖W z‖ ^ 2 ∂μ ≤ A :=
       setIntegral_mono_set (integrableOn_ball_sub_sq hVc hint a)
         (Eventually.of_forall fun _ ↦ sq_nonneg _)
-        (ball_subset_closedBall.trans hsub).eventuallyLE
+        (ball_subset_closedBall.trans hsub).eventuallySubset
     have hμeq : μ.real (ball y (r / 2)) = μ.real (ball x (r / 2)) := by
       rw [Measure.addHaar_real_ball_center, Measure.addHaar_real_ball_center μ x]
     rw [hμeq] at h1

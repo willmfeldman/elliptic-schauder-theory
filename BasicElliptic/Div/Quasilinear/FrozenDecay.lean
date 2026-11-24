@@ -50,7 +50,7 @@ theorem osc_le_of_subset {g : E → E} {T₁ T₂ K : Set E} (hK : IsCompact K)
   have hfin : volume T₁ ≠ ⊤ :=
     ((measure_mono (h12.trans hT₂K)).trans_lt hK.measure_lt_top).ne
   refine (setIntegral_norm_sub_setAverage_sq_le hfin hi1 hi2 c).trans ?_
-  refine setIntegral_mono_set ?_ (Eventually.of_forall fun _ ↦ sq_nonneg _) h12.eventuallyLE
+  refine setIntegral_mono_set ?_ (Eventually.of_forall fun _ ↦ sq_nonneg _) h12.eventuallySubset
   exact ((((hg.sub continuousOn_const).norm.pow 2).integrableOn_compact hK).mono_set hT₂K)
 
 /-- The crude bound `∫_T ‖g - g_T‖² ≤ η² |T|` when `‖g - q₀‖ ≤ η` on `T`. -/
@@ -324,7 +324,7 @@ theorem holderOnWith_gradientWithin_of_smallOsc {ν : E} (hν : ‖ν‖ = 1) :
           ≤ ∫ y in ball pb (2 * t) ∩ halfSpace ν,
               ‖G₀ y - ⨍ y' in ball pb (2 * t) ∩ halfSpace ν, G₀ y'‖ ^ 2 :=
             setIntegral_mono_set ((((hgc.sub continuousOn_const).norm.pow 2).integrableOn_compact
-              hDc).mono_set hHD) (Eventually.of_forall fun _ ↦ sq_nonneg _) hsub.eventuallyLE
+              hDc).mono_set hHD) (Eventually.of_forall fun _ ↦ sq_nonneg _) hsub.eventuallySubset
         _ ≤ KF * (2 * t) ^ (d + 1) := hflat' pb hpbν hdist (2 * t) (by positivity)
             (by rw [hSf, hθdef] at *; linarith)
         _ = KF * 2 ^ (d + 1) * t ^ (d + 1) := by rw [mul_pow]; ring

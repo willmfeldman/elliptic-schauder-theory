@@ -59,9 +59,9 @@ theorem exists_bound_holderOnWith_of_contDiffOn_halfBall {F : Type*} [NormedAddC
   obtain ⟨M, hM⟩ := (isCompact_halfBall ν x r).exists_bound_of_continuousOn
     (hg.continuousOn_fderivWithin hu le_rfl)
   refine ⟨⟨M, hM⟩, ?_⟩
-  have hL := (convex_halfBall ν x r).lipschitzOnWith_of_nnnorm_fderivWithin_le
+  have hL := (convex_halfBall ν x r).lipschitzOnWith_of_nnNorm_fderivWithin_le
     (C := Real.toNNReal M) (hg.differentiableOn one_ne_zero) (fun p hp ↦ by
-      rw [← NNReal.coe_le_coe, coe_nnnorm]
+      rw [← NNReal.coe_le_coe, coe_nnNorm]
       exact (hM p hp).trans (Real.le_coe_toNNReal M))
   refine ⟨_, holderOnWith_of_lipschitzOnWith hL hα1 (D := 2 * r) (by positivity)
     fun p hp q hq ↦ ?_⟩

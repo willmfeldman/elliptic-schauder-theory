@@ -150,8 +150,10 @@ private theorem continuousOn_oddExt {ν : E} (hν : ‖ν‖ = 1) {u : E → ℝ
   have hcont : Continuous fun y : E ↦ ⟪y, ν⟫ := continuous_id.inner continuous_const
   have hR : ∀ y ∈ closedBall (0 : E) 1, reflect ν y ∈ closedBall (0 : E) 1 := fun y hy ↦ by
     rw [mem_closedBall_zero_iff, (reflect ν).norm_map]; exact mem_closedBall_zero_iff.1 hy
-  refine ContinuousOn.if (fun y hy ↦ ?_) (hu.mono fun y hy ↦ ⟨hy.1, ?_⟩)
-    (((hu.comp (reflect ν).continuous.continuousOn fun y hy ↦ ⟨hR y hy.1, ?_⟩).neg).mono
+  refine ContinuousOn.if (fun y hy ↦ ?_) (hu.mono fun y
+      (hy : y ∈ closedBall (0 : E) 1 ∩ closure {y : E | 0 ≤ ⟪y, ν⟫}) ↦ ⟨hy.1, ?_⟩)
+    (((hu.comp (reflect ν).continuous.continuousOn fun y
+      (hy : y ∈ closedBall (0 : E) 1 ∩ closure {y : E | ¬0 ≤ ⟪y, ν⟫}) ↦ ⟨hR y hy.1, ?_⟩).neg).mono
       subset_rfl)
   · have hy0 : ⟪y, ν⟫ = 0 := (frontier_le_subset_eq continuous_const hcont hy.2).symm
     have hmem : y ∈ halfBall ν (0 : E) 1 := ⟨hy.1, hy0.ge⟩

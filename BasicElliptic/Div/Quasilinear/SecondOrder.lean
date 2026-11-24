@@ -141,11 +141,11 @@ theorem exists_local_data {ν x : E} {r : ℝ} {Φ : E → E} {U : Set E} {lam :
     ((hD1.continuousOn_fderiv_of_isOpen hU le_rfl).mono hKU)
   set L := max L₀ 0 with hL
   have hlip : LipschitzOnWith (Real.toNNReal L) (fun p ↦ fderiv ℝ Φ p) (closedBall p₀ κ) := by
-    refine (convex_closedBall p₀ κ).lipschitzOnWith_of_nnnorm_hasFDerivWithin_le
+    refine (convex_closedBall p₀ κ).lipschitzOnWith_of_nnNorm_hasFDerivWithin_le
       (f' := fun p ↦ fderiv ℝ (fun p ↦ fderiv ℝ Φ p) p) (fun p hp ↦ ?_) (fun p hp ↦ ?_)
     · exact ((hD1.differentiableOn one_ne_zero p (hKU hp)).differentiableAt
         (hU.mem_nhds (hKU hp))).hasFDerivAt.hasFDerivWithinAt
-    · rw [← NNReal.coe_le_coe, coe_nnnorm, Real.coe_toNNReal _ (le_max_right _ _)]
+    · rw [← NNReal.coe_le_coe, coe_nnNorm, Real.coe_toNNReal _ (le_max_right _ _)]
       exact (hL₀ p hp).trans (le_max_left _ _)
   refine ⟨α, hα, hα1, ρ, hρ0, hρ1, by linarith, closedBall p₀ κ, convex_closedBall p₀ κ, hKU,
     Λ, L, hΛ, le_max_right _ _, fun a ha b hb ↦ ?_, fun y hy ↦ ?_, H,

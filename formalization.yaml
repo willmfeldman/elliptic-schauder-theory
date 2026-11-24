@@ -13,8 +13,8 @@ project:
   license: "Apache-2.0"
   language: "Lean"
   theorem_prover: "Lean 4"
-  lean_toolchain: "leanprover/lean4:v4.35.0-rc3"
-  mathlib: "v4.35.0-rc3"
+  lean_toolchain: "leanprover/lean4:v4.36.0"
+  mathlib: "v4.36.0"
   description: >-
     Lean 4 formalization of linear elliptic Schauder theory: Hölder spaces on
     sets and Campanato's characterization; interior and flat-boundary C^{1,α}
@@ -24,13 +24,13 @@ project:
 dependencies:
   - name: "mathlib"
     url: "https://github.com/leanprover-community/mathlib4"
-    rev: "c55e6e786f49471c72fbddbec5415808896aec1e"
+    rev: "fc4f59e577feb1a4956671bc04ac18aaaf8cd842"
   - name: "viscosity_solns"
     url: "https://github.com/willmfeldman/viscosity-solution-theory"
-    rev: "b9dc82d59e19c5689b6669b41e0c59168c1cdc84"
+    rev: "e34fe7ee502d572c7d2933209c46212e4652af89"
   - name: "AleksandrovDifferentiability"
     url: "https://github.com/willmfeldman/aleksandrov-differentiability"
-    rev: "5e5c2ec4cee4f8851387e9bb309eeb703cd72a25"
+    rev: "058378f1033dfd842b52b611497996fc92b28a2f"
 
 build:
   package_file: "lakefile.toml"
@@ -235,11 +235,9 @@ comparator:
       vocabulary copied into a generated block, so it imports Mathlib only), and Solution.lean
       imports BasicElliptic and proves the same statements.
     release_workflow: ".github/workflows/release-comparator.yml"
-    comparator_revision: "fd5d5bcf14177b187f66d4502071268d877887c3"
-    lean4export_revision: "66f1fb4bc256072069767fce52d39480e4524869"
-    landrun_revision: "811cfff51ceaf3d9843708aa6d22e9b84ccac8b4"
-    toolchain: "leanprover/lean4:v4.35.0-rc3"
-    mathlib: "v4.35.0-rc3"
+    engine: "lake comparator"
+    toolchain: "leanprover/lean4:v4.36.0"
+    mathlib: "v4.36.0"
     permitted_axioms:
       - "propext"
       - "Classical.choice"

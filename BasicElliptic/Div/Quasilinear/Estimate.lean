@@ -749,11 +749,11 @@ theorem quasilinear_conormal_estimate_aux : QuasilinearConormalEstimateStatement
   set L := max L₀ 0 with hLdef
   have hL0 : 0 ≤ L := le_max_right _ _
   have hlip : LipschitzOnWith (Real.toNNReal L) (fun p ↦ fderiv ℝ Φ p) K₀ := by
-    refine hK₀c.lipschitzOnWith_of_nnnorm_hasFDerivWithin_le
+    refine hK₀c.lipschitzOnWith_of_nnNorm_hasFDerivWithin_le
       (f' := fun p ↦ fderiv ℝ (fun p ↦ fderiv ℝ Φ p) p) (fun p hp ↦ ?_) (fun p hp ↦ ?_)
     · exact ((hD1.differentiableOn one_ne_zero p (hK₀U hp)).differentiableAt
         (hU₀o.mem_nhds (hK₀U hp))).hasFDerivAt.hasFDerivWithinAt
-    · rw [← NNReal.coe_le_coe, coe_nnnorm, Real.coe_toNNReal _ hL0]
+    · rw [← NNReal.coe_le_coe, coe_nnNorm, Real.coe_toNNReal _ hL0]
       exact (hL₀ p hp).trans (le_max_left _ _)
   have hL : ∀ a ∈ K₀, ∀ b ∈ K₀, ‖fderiv ℝ Φ a - fderiv ℝ Φ b‖ ≤ L * ‖a - b‖ :=
     fun a ha b hb ↦ by

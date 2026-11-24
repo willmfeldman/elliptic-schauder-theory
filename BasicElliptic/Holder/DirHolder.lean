@@ -145,8 +145,8 @@ theorem of_succ (hSc : IsCompact S) (hScv : Convex ℝ S) (hα : 0 < α)
     obtain ⟨C, hC⟩ := exists_holderOnWith_fderivWithin h
     obtain ⟨A, hA⟩ := exists_bound_of_holderOnWith hSc hα hC
     have hlip : LipschitzOnWith A f S :=
-      hScv.lipschitzOnWith_of_nnnorm_hasFDerivWithin_le (fun y hy ↦ (h.1 y hy).hasFDerivWithinAt)
-        fun y hy ↦ by rw [← NNReal.coe_le_coe, coe_nnnorm]; exact hA y hy
+      hScv.lipschitzOnWith_of_nnNorm_hasFDerivWithin_le (fun y hy ↦ (h.1 y hy).hasFDerivWithinAt)
+        fun y hy ↦ by rw [← NNReal.coe_le_coe, coe_nnNorm]; exact hA y hy
     obtain ⟨Dm, hDm⟩ := Metric.isBounded_iff.1 hSc.isBounded
     exact ⟨_, holderOnWith_of_lipschitzOnWith hlip hα1 (le_max_right Dm 0)
       fun x hx y hy ↦ (hDm hx hy).trans (le_max_left _ _)⟩
@@ -268,11 +268,11 @@ theorem comp (hS : UniqueDiffOn ℝ S) (hSc : IsCompact S) (hScv : Convex ℝ S)
     obtain ⟨L₀, hL₀⟩ := hK.exists_bound_of_continuousOn
       ((hψ1.continuousOn_fderiv_of_isOpen hU le_rfl).mono hKU)
     have hlip : LipschitzOnWith (Real.toNNReal L₀) ψ K := by
-      refine hKc.lipschitzOnWith_of_nnnorm_hasFDerivWithin_le
+      refine hKc.lipschitzOnWith_of_nnNorm_hasFDerivWithin_le
         (f' := fun p ↦ fderiv ℝ ψ p) (fun p hp ↦ ?_) (fun p hp ↦ ?_)
       · exact ((hψ1.differentiableOn one_ne_zero p (hKU hp)).differentiableAt
           (hU.mem_nhds (hKU hp))).hasFDerivAt.hasFDerivWithinAt
-      · rw [← NNReal.coe_le_coe, coe_nnnorm]
+      · rw [← NNReal.coe_le_coe, coe_nnNorm]
         exact (hL₀ p hp).trans (Real.le_coe_toNNReal L₀)
     have hgH : ∃ C, HolderOnWith C α g S := by
       rw [hgexp]

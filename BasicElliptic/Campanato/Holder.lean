@@ -150,9 +150,9 @@ theorem sq_norm_sub_mul_le {T U₁ U₂ : Set E} {F : E → V} {a b : V} (hT : M
   rw [setIntegral_const, smul_eq_mul, integral_add (hiT₁.const_mul 2) (hiT₂.const_mul 2),
     integral_const_mul, integral_const_mul] at hmono
   have h₁ : ∫ y in T, ‖F y - a‖ ^ 2 ≤ ∫ y in U₁, ‖F y - a‖ ^ 2 :=
-    setIntegral_mono_set hi₁ (ae_of_all _ fun _ ↦ by positivity) hT₁.eventuallyLE
+    setIntegral_mono_set hi₁ (ae_of_all _ fun _ ↦ by positivity) hT₁.eventuallySubset
   have h₂ : ∫ y in T, ‖F y - b‖ ^ 2 ≤ ∫ y in U₂, ‖F y - b‖ ^ 2 :=
-    setIntegral_mono_set hi₂ (ae_of_all _ fun _ ↦ by positivity) hT₂.eventuallyLE
+    setIntegral_mono_set hi₂ (ae_of_all _ fun _ ↦ by positivity) hT₂.eventuallySubset
   calc ‖a - b‖ ^ 2 * volume.real T = volume.real T * ‖a - b‖ ^ 2 := mul_comm _ _
     _ ≤ _ := hmono
     _ ≤ _ := add_le_add (mul_le_mul_of_nonneg_left h₁ two_pos.le)

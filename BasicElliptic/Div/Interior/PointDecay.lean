@@ -245,7 +245,7 @@ private theorem comparison {Ch : ℝ} (hCh : 0 ≤ Ch)
     simpa only [add_comm] using this
   have sf : ∫ y in ball x₀ ρ, ‖F y - V y‖ ^ 2 ≤ D :=
     setIntegral_mono_set (integrable_norm_sq hFVL) (Eventually.of_forall fun _ ↦ sq_nonneg _)
-      hρsub.eventuallyLE
+      hρsub.eventuallySubset
   set q := (ρ / r) ^ (finrank ℝ E + 2)
   have hq0 : 0 ≤ q := by positivity
   have hq1 : q ≤ 1 := pow_le_one₀ (by positivity) ((div_le_one hr).2 hρr)
@@ -456,7 +456,7 @@ theorem campanato_decay_at_point_skew {α : ℝ} (hα : 0 < α) (hα1 : α < 1) 
     exact (setIntegral_norm_sub_setAverage_sq_le measure_ball_lt_top.ne
       (hL1.integrable one_le_two) (integrable_norm_sq hL1) _).trans
       (setIntegral_mono_set (integrable_norm_sq (hL.sub (memLp_const _)))
-        (Eventually.of_forall fun _ ↦ sq_nonneg _) (ball_subset_ball h12).eventuallyLE)
+        (Eventually.of_forall fun _ ↦ sq_nonneg _) (ball_subset_ball h12).eventuallySubset)
   -- the one-step inequality
   have hstep : ∀ ρ r, 0 < ρ → ρ ≤ r → r ≤ R →
       ψ ρ ≤ A * (ρ / r) ^ a * ψ r + (Bf * S) * r ^ b := by

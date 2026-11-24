@@ -99,7 +99,7 @@ python3 scripts/challenge-prep.py check                 # challenge vocabulary i
 - **Comparator challenges.** [`challenges/`](challenges/README.md) restates all 16 headline theorems over Mathlib
   alone, in two workspaces (divergence form and nondivergence form). CI only checks that the challenges and solutions
   elaborate and that the solutions use the three standard axioms. Statement equality is checked by
-  [Comparator](https://github.com/leanprover/comparator) in the release workflow
+  the toolchain's `lake comparator --paranoid` in the release workflow
   (`.github/workflows/release-comparator.yml`), whose attestation is attached to each GitHub release.
 - **Notation.** `scripts/check_notation.py` prints every statement and definition (`Statements/`, `Defs/`,
   `Basic/HalfSpace`) with `pp.notation false`. It flags any big-operator binder (`∫`, `⨍`, `∑`, `⨆`, …) whose body is a
@@ -109,14 +109,14 @@ python3 scripts/challenge-prep.py check                 # challenge vocabulary i
 ## Building
 
 The toolchain and dependencies are pinned in `lean-toolchain`, `lakefile.toml` and `lake-manifest.json`:
-- Lean `v4.35.0-rc3`;
-- Mathlib `v4.35.0-rc3` (commit `c55e6e7`),
+- Lean `v4.36.0`;
+- Mathlib `v4.36.0` (commit `fc4f59e`),
   [leanprover-community/mathlib4](https://github.com/leanprover-community/mathlib4);
-- viscosity-solution-theory `v0.4.0` (Lake package `viscosity_solns`, commit `b9dc82d`),
+- viscosity-solution-theory `v0.5.0` (Lake package `viscosity_solns`, commit `e34fe7e`),
   [willmfeldman/viscosity-solution-theory](https://github.com/willmfeldman/viscosity-solution-theory).
   - It supplies the continuous Weyl lemma and Perron's method for the Dirichlet problem on a ball, and is used only in
     `BasicElliptic/Harmonic/`.
-  - It pulls in aleksandrov-differentiability `v0.4.0` (commit `5e5c2ec`), which this library does not import
+  - It pulls in aleksandrov-differentiability `v0.5.0` (commit `058378f`), which this library does not import
     directly.
 
 The other packages in `lake-manifest.json` are Mathlib's own dependencies. All dependencies are Apache-2.0.

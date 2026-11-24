@@ -626,17 +626,17 @@ theorem contDiffOn_one_comp_and_holder {F : Type*} [NormedAddCommGroup F] [Norme
   -- Hölder continuity of `y ↦ DΨ(g y)`
   obtain ⟨A, hA⟩ := exists_bound_of_holderOnWith hSc hα hCg
   have hglip : LipschitzOnWith A g S :=
-    hScv.lipschitzOnWith_of_nnnorm_hasFDerivWithin_le hg fun y hy ↦ by
-      rw [← NNReal.coe_le_coe, coe_nnnorm]; exact hA y hy
+    hScv.lipschitzOnWith_of_nnNorm_hasFDerivWithin_le hg fun y hy ↦ by
+      rw [← NNReal.coe_le_coe, coe_nnNorm]; exact hA y hy
   obtain ⟨Dm, hDm⟩ := Metric.isBounded_iff.1 hSc.isBounded
   obtain ⟨L₀, hL₀⟩ := hK.exists_bound_of_continuousOn
     ((hD1.continuousOn_fderiv_of_isOpen hU le_rfl).mono hKU)
   have hDlip : LipschitzOnWith (Real.toNNReal L₀) (fderiv ℝ Ψ) K := by
-    refine hKc.lipschitzOnWith_of_nnnorm_hasFDerivWithin_le
+    refine hKc.lipschitzOnWith_of_nnNorm_hasFDerivWithin_le
       (f' := fun p ↦ fderiv ℝ (fderiv ℝ Ψ) p) (fun p hp ↦ ?_) (fun p hp ↦ ?_)
     · exact ((hD1.differentiableOn one_ne_zero p (hKU hp)).differentiableAt
         (hU.mem_nhds (hKU hp))).hasFDerivAt.hasFDerivWithinAt
-    · rw [← NNReal.coe_le_coe, coe_nnnorm]
+    · rw [← NNReal.coe_le_coe, coe_nnNorm]
       exact (hL₀ p hp).trans (Real.le_coe_toNNReal L₀)
   have hDm0 : 0 ≤ max Dm 0 := le_max_right _ _
   have hgH := holderOnWith_of_lipschitzOnWith hglip hα1 hDm0
